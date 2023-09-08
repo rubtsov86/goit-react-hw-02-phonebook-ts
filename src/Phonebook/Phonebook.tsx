@@ -18,7 +18,6 @@ export class Phonebook extends React.Component<IProps> {
   };
 
   onSubmitHandler = (e: React.SyntheticEvent) => {
-    console.log(this.props.onSubmit);
     e.preventDefault();
 
     this.props.onSubmit(this.state.name, this.state.number);

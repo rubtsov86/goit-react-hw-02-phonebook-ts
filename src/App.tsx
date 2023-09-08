@@ -20,6 +20,10 @@ class App extends React.Component<{}, IState> {
   };
 
   onSubmit = (name: string, number: string) => {
+    if (this.state.contacts.find((contact) => contact.name === name)) {
+      return console.log("qweqwe");
+    }
+
     const newContact = { name, number, id: "qwe" };
 
     this.setState((prevState: IState): IState => {
@@ -37,6 +41,18 @@ class App extends React.Component<{}, IState> {
     });
   };
 
+  onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log((e.target as HTMLButtonElement).id);
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        contacts: prevState.contacts.filter(
+          (contact) => contact.id !== (e.target as HTMLButtonElement).id
+        ),
+      };
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -45,6 +61,7 @@ class App extends React.Component<{}, IState> {
           contacts={this.state.contacts.filter((contact) =>
             contact.name.toLowerCase().includes(this.state.filter)
           )}
+          onDelete={this.onDelete}
         />
         <Filter handleChange={this.handleChange} />
       </div>
