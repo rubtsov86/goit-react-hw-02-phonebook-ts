@@ -1,54 +1,95 @@
 import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as yup from "yup";
 
 interface IProps {
-  onSubmit: (name: string, number: string) => void;
+  onSubmit: (name: string, number: string) => true | null;
 }
 
+// interface IState {
+//   name: string;
+//   number: string;
+// }
+
+const initialValues = {
+  name: "",
+  number: "",
+};
+
+const shema = yup.object().shape({
+  name: yup.string().min(4).required(),
+  number: yup.string().required(),
+});
+
 export class Phonebook extends React.Component<IProps> {
-  state = {
-    name: "",
-    number: "",
-  };
+  // state = {
+  //   name: "",
+  //   number: "",
+  // };
 
-  handleChange = (evt: React.FormEvent<HTMLInputElement>): void => {
-    this.setState({
-      [(evt.target as HTMLInputElement).name]: (evt.target as HTMLInputElement)
-        .value,
-    });
-  };
+  // handleChange = (evt: React.FormEvent<HTMLInputElement>): void => {
+  //   const inputRef = evt.target as HTMLInputElement;
+  //   const inputName = inputRef.name as keyof IState;
 
-  onSubmitHandler = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  //   const newState = {
+  //     [inputName]: inputRef.value,
+  //   } as Pick<IState, keyof IState>;
 
-    this.props.onSubmit(this.state.name, this.state.number);
-  };
+  //   this.setState(newState);
+  // };
+
+  // onSubmitHandler = (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
+
+  //   this.props.onSubmit(this.state.name, this.state.number);
+
+  //   this.reset();
+  // };
+
+  // reset = () => {
+  //   this.setState({ name: "", number: "" });
+  // };
 
   render() {
     return (
       <div>
         <h2>Phonebook</h2>
-        <p>Name</p>
-        <input
-          type="text"
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          onChange={this.handleChange}
-        />
-
-        <p>Number</p>
-        <input
-          type="tel"
-          name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          onChange={this.handleChange}
-        />
-        <button type="submit" onClick={this.onSubmitHandler}>
-          Add contact
-        </button>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={shema}
+          onSubmit={({ name, number }, actions) => {
+            const addNewContact = this.props.onSubmit(name, number);
+            if (addNewContact) {
+              actions.resetForm();
+            }
+          }}
+        >
+          <Form>
+            <label htmlFor="name">Name</label>
+            <Field
+              type="text"
+              name="name"
+              // pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              // title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+              required
+              // value={this.state.name}
+              // onChange={this.handleChange}
+            />
+            <ErrorMessage name="name" component="div" />
+            <label htmlFor="number">Number</label>
+            <Field
+              type="tel"
+              name="number"
+              // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              // title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+              required
+              // value={this.state.number}
+              // onChange={this.handleChange}
+            />
+            <ErrorMessage name="number" component="div" />
+            <button type="submit">Add contact</button>
+          </Form>
+        </Formik>
       </div>
     );
   }
