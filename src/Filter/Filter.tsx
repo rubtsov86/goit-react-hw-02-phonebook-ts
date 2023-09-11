@@ -1,4 +1,5 @@
 import React from "react";
+import { FilterLabel, FilterInput } from "./Filter.styled";
 
 interface IProps {
   filter: string;
@@ -8,8 +9,8 @@ interface IProps {
 export const Filter: React.FC<IProps> = ({ handleChange, filter }) => {
   return (
     <div>
-      <p>Find contact by name</p>
-      <input
+      <FilterLabel htmlFor="name">Find contact by name</FilterLabel>
+      <FilterInput
         type="text"
         name="name"
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"

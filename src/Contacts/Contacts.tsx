@@ -1,3 +1,11 @@
+import {
+  ContactsList,
+  Container,
+  ContactsListItem,
+  AgeSelect,
+  Button,
+} from "./Contacts.styled";
+
 export interface IData {
   id: string;
   name: string;
@@ -20,11 +28,10 @@ export const Contacts: React.FC<IContacts> = ({
   onAddAge,
 }) => {
   return (
-    <div>
-      <h2>Contacts</h2>
-      <ul>
+    <Container>
+      <ContactsList>
         {contacts.map(({ name, number, id, friend, age }) => (
-          <li key={id}>
+          <ContactsListItem key={id}>
             <input
               type="checkbox"
               checked={friend}
@@ -33,8 +40,8 @@ export const Contacts: React.FC<IContacts> = ({
             />
             {name} {number}{" "}
             <label>
-              Choose contact age
-              <select
+              age
+              <AgeSelect
                 name="age"
                 onChange={onAddAge}
                 id={"age" + id}
@@ -44,14 +51,14 @@ export const Contacts: React.FC<IContacts> = ({
                 <option value="18-25">18-25</option>
                 <option value="26-35">26-35</option>
                 <option value="36+">36+</option>
-              </select>
+              </AgeSelect>
             </label>
-            <button type="button" onClick={onDelete} id={id}>
+            <Button type="button" onClick={onDelete} id={id}>
               Delete
-            </button>
-          </li>
+            </Button>
+          </ContactsListItem>
         ))}
-      </ul>
-    </div>
+      </ContactsList>
+    </Container>
   );
 };

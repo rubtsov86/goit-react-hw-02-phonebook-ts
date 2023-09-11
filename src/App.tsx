@@ -2,6 +2,7 @@ import React from "react";
 import { nanoid } from "nanoid";
 import { Phonebook } from "./Phonebook/Phonebook";
 import { Contacts, IData } from "./Contacts/Contacts";
+import { Title } from "./Contacts/Contacts.styled";
 import { Filter } from "./Filter/Filter";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -116,6 +117,8 @@ class App extends React.Component<{}, IState> {
     return (
       <div className="App">
         <Phonebook onSubmit={this.onSubmit} />
+        <Title>Contacts</Title>
+        <Filter filter={filter} handleChange={this.handleChange} />
         <Contacts
           contacts={contacts.filter((contact) =>
             contact.name.toLowerCase().includes(filter)
@@ -124,7 +127,7 @@ class App extends React.Component<{}, IState> {
           onAddFriend={this.onAddFriend}
           onAddAge={this.onAddAge}
         />
-        <Filter filter={filter} handleChange={this.handleChange} />
+
         <Toaster />
       </div>
     );
